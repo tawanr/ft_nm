@@ -1,6 +1,6 @@
 LIBFT_DIR = libft
 
-SRCS = main.c parse_file.c symbols.c
+SRCS = main.c parse_file.c symbols.c errors.c
 
 SRC_DIR = srcs/
 OBJS = $(SRCS:.c=.o)

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   errors.c                                             :+:      :+:    :+: */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,25 +12,14 @@
 
 #include "ft_nm.h"
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        ft_putstr_fd("Invalid argument(s)\n", STDERR_FILENO);
-        return 1;
-    }
-    Config config = {argv[0], argv[1]};
+void error_file_not_found(Config *config) {
+    ft_putstr_fd("ft_nm: ", STDERR_FILENO);
+    ft_putstr_fd(config->file_name, STDERR_FILENO);
+    ft_putstr_fd(": no such file or directory\n", STDERR_FILENO);
+}
 
-    int fd = open(argv[1], O_RDONLY);
-    if (fd == -1) {
-        error_file_not_found(&config);
-        return 1;
-    }
-    Elf_File64 elf_file;
-    parse_file64(&config, fd, &elf_file);
-    if (elf_file.file == NULL)
-        return 1;
-    sort_symbols(&(elf_file.symbols), elf_file.symbol_count);
-    print_symbols(elf_file.symbols, elf_file.symbol_count);
-    clean_elf64(&elf_file);
-
-    return 0;
+void error_file_format_not_recognized(Config *config) {
+    ft_putstr_fd("ft_nm: ", STDERR_FILENO);
+    ft_putstr_fd(config->file_name, STDERR_FILENO);
+    ft_putstr_fd(": file format not recognized\n", STDERR_FILENO);
 }
