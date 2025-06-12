@@ -52,10 +52,32 @@ Elf_Symbol **extract_symbols64(Elf_File64 *elf_file) {
         symbols[i]->value = info.symtab[i].st_value;
         symbols[i]->type = ELF64_ST_TYPE(info.symtab[i].st_info);
         symbols[i]->binding = ELF64_ST_BIND(info.symtab[i].st_info);
-        symbols[i]->section_rel = 0;
-        if (info.symtab[i].st_shndx < elf_file->file_headers->e_shentsize)
-            symbols[i]->section_rel =
+        symbols[i]->special_index = info.symtab[i].st_shndx;
+        symbols[i]->sh_type = 0;
+        symbols[i]->flags = 0;
+        if (info.symtab[i].st_shndx != SHN_UNDEF &&
+            info.symtab[i].st_shndx != SHN_ABS &&
+            symbols[i]->type != SHT_NULL) {
+            symbols[i]->sh_type =
                 elf_file->section_headers[info.symtab[i].st_shndx].sh_type;
+            symbols[i]->flags =
+                elf_file->section_headers[info.symtab[i].st_shndx].sh_flags;
+        }
+        // symbols[i]->sh_type =
+        //     info.symtab[i].st_shndx != SHN_UNDEF && symbols[i]->type !=
+        //     SHT_NULL
+        //         ? elf_file->section_headers[info.symtab[i].st_shndx].sh_type
+        //         : 0;
+        // printf("sh_type: %x\n", symbols[i]->sh_type);
+        // symbols[i]->flags =
+        //     info.symtab[i].st_shndx != SHN_UNDEF && symbols[i]->type !=
+        //     SHT_NULL
+        //         ? elf_file->section_headers[info.symtab[i].st_shndx].sh_flags
+        //         : 0;
+        symbols[i]->section_rel = 0;
+        // if (info.symtab[i].st_shndx < elf_file->file_headers->e_shentsize)
+        //     symbols[i]->section_rel =
+        //         elf_file->section_headers[info.symtab[i].st_shndx].sh_type;
     }
     return symbols;
 }

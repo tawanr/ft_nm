@@ -31,6 +31,9 @@ typedef struct {
     int type;
     int binding;
     int section_rel;
+    int special_index;
+    unsigned long flags;
+    unsigned int sh_type;
 } Elf_Symbol;
 
 typedef struct {
@@ -69,5 +72,6 @@ void sort_symbols(Elf_Symbol ***symbols, size_t count);
 void print_symbols(Elf_Symbol **symbols, size_t count);
 void error_file_not_found(Config *config);
 void error_file_format_not_recognized(Config *config);
+void error_no_symbols(Config *config);
 
 #endif

@@ -23,3 +23,9 @@ void error_file_format_not_recognized(Config *config) {
     ft_putstr_fd(config->file_name, STDERR_FILENO);
     ft_putstr_fd(": file format not recognized\n", STDERR_FILENO);
 }
+
+void error_no_symbols(Config *config) {
+    ft_putstr_fd("ft_nm: ", STDERR_FILENO);
+    ft_putstr_fd(config->file_name, STDERR_FILENO);
+    ft_putstr_fd(": no symbols\n", STDERR_FILENO);
+}

@@ -25,7 +25,12 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     Elf_File64 elf_file;
+    elf_file.symbol_count = 0;
     parse_file64(&config, fd, &elf_file);
+    if (elf_file.symbol_count == 0) {
+        error_no_symbols(&config);
+        return 1;
+    }
     if (elf_file.file == NULL)
         return 1;
     sort_symbols(&(elf_file.symbols), elf_file.symbol_count);
