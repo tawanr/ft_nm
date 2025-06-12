@@ -66,12 +66,13 @@ typedef struct {
     long unsigned int file_size;
 } Elf_File32;
 
-void parse_file64(Config *config, int fd, Elf_File64 *elf_file);
+int parse_file64(Config *config, int fd, Elf_File64 *elf_file);
 void clean_elf64(Elf_File64 *elf_file);
 void sort_symbols(Elf_Symbol ***symbols, size_t count);
 void print_symbols(Elf_Symbol **symbols, size_t count);
 void error_file_not_found(Config *config);
 void error_file_format_not_recognized(Config *config);
 void error_no_symbols(Config *config);
+void warning_is_directory(Config *config);
 
 #endif

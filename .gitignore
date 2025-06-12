@@ -54,3 +54,4 @@ dkms.conf
 ft_nm
 .clang*
 *.txt
+*.debug

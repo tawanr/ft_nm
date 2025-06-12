@@ -13,9 +13,9 @@
 #include "ft_nm.h"
 
 void error_file_not_found(Config *config) {
-    ft_putstr_fd("ft_nm: ", STDERR_FILENO);
+    ft_putstr_fd("ft_nm: '", STDERR_FILENO);
     ft_putstr_fd(config->file_name, STDERR_FILENO);
-    ft_putstr_fd(": no such file or directory\n", STDERR_FILENO);
+    ft_putstr_fd("': No such file\n", STDERR_FILENO);
 }
 
 void error_file_format_not_recognized(Config *config) {
@@ -25,7 +25,13 @@ void error_file_format_not_recognized(Config *config) {
 }
 
 void error_no_symbols(Config *config) {
-    ft_putstr_fd("ft_nm: ", STDERR_FILENO);
+    ft_putstr_fd("ft_nm: '", STDERR_FILENO);
     ft_putstr_fd(config->file_name, STDERR_FILENO);
-    ft_putstr_fd(": no symbols\n", STDERR_FILENO);
+    ft_putstr_fd("': no symbols\n", STDERR_FILENO);
+}
+
+void warning_is_directory(Config *config) {
+    ft_putstr_fd("ft_nm: Warning: '", STDERR_FILENO);
+    ft_putstr_fd(config->file_name, STDERR_FILENO);
+    ft_putstr_fd("' is a directory\n", STDERR_FILENO);
 }

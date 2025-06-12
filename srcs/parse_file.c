@@ -82,20 +82,20 @@ Elf_Symbol **extract_symbols64(Elf_File64 *elf_file) {
     return symbols;
 }
 
-void parse_file64(Config *config, int fd, Elf_File64 *elf_file) {
+int parse_file64(Config *config, int fd, Elf_File64 *elf_file) {
     struct stat file_stat;
 
     elf_file->file = NULL;
     fstat(fd, &file_stat);
     if (file_stat.st_size <= 0)
-        return;
+        return 0;
     elf_file->file_size = file_stat.st_size;
     if (elf_file->file_size <= 0)
-        return;
+        return 0;
     elf_file->file =
         mmap(0, elf_file->file_size, PROT_READ, MAP_PRIVATE, fd, 0);
     if (elf_file == NULL)
-        return;
+        return 0;
     elf_file->file_headers = (Elf64_Ehdr *)(elf_file->file);
     if (elf_file->file_headers->e_ident[EI_MAG0] != ELFMAG0 ||
         elf_file->file_headers->e_ident[EI_MAG1] != ELFMAG1 ||
@@ -104,14 +104,15 @@ void parse_file64(Config *config, int fd, Elf_File64 *elf_file) {
         error_file_format_not_recognized(config);
         munmap(elf_file->file, elf_file->file_size);
         elf_file->file = NULL;
-        return;
+        return 1;
     }
     if (elf_file->file_headers->e_shoff > elf_file->file_size ||
         elf_file->file_headers->e_shoff <= sizeof(Elf64_Ehdr))
-        return;
+        return 0;
     elf_file->section_headers =
         (Elf64_Shdr *)(elf_file->file + elf_file->file_headers->e_shoff);
     elf_file->symbols = extract_symbols64(elf_file);
+    return 0;
 }
 
 void clean_elf64(Elf_File64 *elf_file) {
